@@ -1,32 +1,18 @@
 import React from 'react';
-import { Route, Redirect, RouteProps } from 'react-router-dom';
-
-interface PrivateRouteProps extends RouteProps {
-    children: React.ReactNode;
-}
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 const isAuthenticated = (): boolean => {
     const token = localStorage.getItem('token');
-    return !!token;
+    return !!token; 
 };
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, ...rest }) => {
-    return (
-        <Route
-            {...rest}
-            render={({ location }) =>
-                isAuthenticated() ? (
-                    children
-                ) : (
-                    <Redirect
-                        to={{
-                            pathname: "/login",
-                            state: { from: location }
-                        }}
-                    />
-                )
-            }
-        />
+const PrivateRoute: React.FC = () => {
+    let location = useLocation(); 
+
+    return isAuthenticated() ? (
+        <Outlet />
+    ) : (
+        <Navigate to="/login" replace state={{ from: location }} />
     );
 };
 

@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import apiService from '../api/api-service';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const history = useHistory();
+    const navigate = useNavigate(); // Updated to useNavigate
 
-    const handleLogin = async (e: React.FormEvent) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         try {
             const token = await apiService('/auth/login', 'POST', { email, password });
             localStorage.setItem('token', token);
-            history.push('/main');
+            navigate('/main'); // Updated to use navigate
         } catch (error) {
             console.error(error);
         }
